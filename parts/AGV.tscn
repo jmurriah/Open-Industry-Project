@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://cagvpjdemo001"]
+
+[ext_resource type="Script" path="res://src/AGV/agv.gd" id="1_agv"]
+
+[sub_resource type="StandardMaterial3D" id="mat_body"]
+albedo_color = Color(0.9, 0.55, 0.1, 1)
+metallic = 0.4
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="mat_dark"]
+albedo_color = Color(0.2, 0.2, 0.22, 1)
+metallic = 0.5
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="mat_fork"]
+albedo_color = Color(0.75, 0.75, 0.78, 1)
+metallic = 0.8
+roughness = 0.25
+
+[sub_resource type="BoxMesh" id="mesh_chassis"]
+size = Vector3(1.8, 1.5, 1.9)
+
+[sub_resource type="BoxMesh" id="mesh_mast"]
+size = Vector3(1.2, 7.0, 0.18)
+
+[sub_resource type="CylinderMesh" id="mesh_wheel"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.18
+
+[sub_resource type="BoxMesh" id="mesh_fork"]
+size = Vector3(0.2, 0.1, 2.6)
+
+[sub_resource type="BoxShape3D" id="shape_pickup"]
+size = Vector3(2.0, 2.5, 2.4)
+
+[node name="AGV" type="Node3D"]
+script = ExtResource("1_agv")
+
+[node name="Chassis" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 1.7)
+material_override = SubResource("mat_body")
+mesh = SubResource("mesh_chassis")
+
+[node name="Mast" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0.65)
+material_override = SubResource("mat_dark")
+mesh = SubResource("mesh_mast")
+
+[node name="WheelFL" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -0.9, 0.25, 1.0)
+material_override = SubResource("mat_dark")
+mesh = SubResource("mesh_wheel")
+
+[node name="WheelFR" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.9, 0.25, 1.0)
+material_override = SubResource("mat_dark")
+mesh = SubResource("mesh_wheel")
+
+[node name="WheelBL" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -0.9, 0.25, 2.4)
+material_override = SubResource("mat_dark")
+mesh = SubResource("mesh_wheel")
+
+[node name="WheelBR" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.9, 0.25, 2.4)
+material_override = SubResource("mat_dark")
+mesh = SubResource("mesh_wheel")
+
+[node name="LiftGroup" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0.3)
+
+[node name="ForkLeft" type="MeshInstance3D" parent="LiftGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0, -1.0)
+material_override = SubResource("mat_fork")
+mesh = SubResource("mesh_fork")
+
+[node name="ForkRight" type="MeshInstance3D" parent="LiftGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0, -1.0)
+material_override = SubResource("mat_fork")
+mesh = SubResource("mesh_fork")
+
+[node name="PickupArea" type="Area3D" parent="LiftGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -1.0)
+collision_layer = 0
+collision_mask = 10
+
+[node name="PickupCollision" type="CollisionShape3D" parent="LiftGroup/PickupArea"]
+shape = SubResource("shape_pickup")
